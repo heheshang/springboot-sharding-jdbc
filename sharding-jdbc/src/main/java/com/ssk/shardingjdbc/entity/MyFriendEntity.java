@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * @date 2019-06-13-上午 10:39
  */
 @Entity
-@Table(name = "MY_FRIEND")
+@Table(name = "my_friend")
 @Data
 public class MyFriendEntity implements Serializable {
 
