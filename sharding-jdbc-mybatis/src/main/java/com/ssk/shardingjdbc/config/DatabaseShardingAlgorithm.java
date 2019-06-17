@@ -23,8 +23,10 @@ import java.util.Collection;
 @Slf4j
 @Service("preciseModuloDatabaseShardingAlgorithm")
 public class DatabaseShardingAlgorithm implements PreciseShardingAlgorithm<Timestamp> {
-
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//定义格式，不显示毫秒
+    /**
+     * 定义格式，不显示毫秒
+     */
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private ShardConfigMapper shardConfigMapper;

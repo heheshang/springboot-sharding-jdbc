@@ -7,6 +7,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableTransactionManagement(proxyTargetClass = true)
+/**
+ * @author ssk
+ */
 public class ShardingJdbcMybatisApplication {
 
     public static void main(String[] args) {
