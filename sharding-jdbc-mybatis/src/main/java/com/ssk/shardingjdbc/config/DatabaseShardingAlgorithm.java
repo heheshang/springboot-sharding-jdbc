@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Collection;
 
 /**
@@ -23,10 +25,6 @@ import java.util.Collection;
 @Slf4j
 @Service("preciseModuloDatabaseShardingAlgorithm")
 public class DatabaseShardingAlgorithm implements PreciseShardingAlgorithm<Timestamp> {
-    /**
-     * 定义格式，不显示毫秒
-     */
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private ShardConfigMapper shardConfigMapper;
@@ -39,11 +37,9 @@ public class DatabaseShardingAlgorithm implements PreciseShardingAlgorithm<Times
     @Override
     public String doSharding(Collection<String> collection, PreciseShardingValue<Timestamp> preciseShardingValue) {
 
+        Month month = LocalDateTime.now().getMonth();
         String physicDatabase = null;
-        Timestamp valueTime = preciseShardingValue.getValue();
-        String orgValue = df.format(valueTime);
-        String subValue = orgValue.substring(0, 4).replace("-", "");
-        physicDatabase = getShardConfig(physicDatabase, subValue);
+        physicDatabase = getShardConfig(physicDatabase, String.valueOf(month.getValue()));
         if (StringUtils.isBlank(physicDatabase)) {
             log.info("----->该分片键值找不到对应的分库,默认取第一个库，分片键是={}，逻辑表是={},分片值是={}", preciseShardingValue.getColumnName(), preciseShardingValue.getLogicTableName(), preciseShardingValue.getValue());
             for (String value : collection) {

@@ -1,5 +1,6 @@
 package com.ssk.shardingjdbc.config;
 
+import com.google.common.collect.Lists;
 import com.ssk.shardingjdbc.mapper.nosharding.ShardConfigMapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +10,11 @@ import org.apache.shardingsphere.api.sharding.standard.PreciseShardingValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author ssk www.8win.com Inc.All rights reserved
@@ -29,7 +34,7 @@ public class CommonTableShardingAlgorithm implements PreciseShardingAlgorithm<St
     public String doSharding(Collection<String> collection, PreciseShardingValue<String> preciseShardingValue) {
 
         String physicsTable = null;
-        physicsTable = setValue(preciseShardingValue);
+        physicsTable = setValue(preciseShardingValue, new ArrayList<>(collection));
         if (StringUtils.isBlank(physicsTable)) {
             log.info("----->该分片键值找不到对应的分表,默认取第一个表，分片键是={}，逻辑表是={},分片值是={}", preciseShardingValue.getColumnName(), preciseShardingValue.getLogicTableName(), preciseShardingValue.getValue());
             for (String value : collection) {
@@ -45,15 +50,9 @@ public class CommonTableShardingAlgorithm implements PreciseShardingAlgorithm<St
      * @param preciseShardingValue
      * @return
      */
-    protected String setValue(PreciseShardingValue<String> preciseShardingValue) {
-//        String substring = preciseShardingValue.getValue().substring(0, 4);
-//        ShardConfig config = shardConfigMapper.selectByPrimaryKey(substring);
-        String v = (Long.parseLong(preciseShardingValue.getValue()) & 1) == 0 ? "1" : "0";
-//        if (config != null) {
-//             TODO: 2019/5/8 需要调整
-//            String[] split = config.getConfigValue().split(",");
-        return preciseShardingValue.getLogicTableName() + "_" + v;
-//        }
-//        return null;
+    protected String setValue(PreciseShardingValue<String> preciseShardingValue, List<String> collection) {
+
+        String v = (Long.parseLong(preciseShardingValue.getValue()) & 1) == 0 ? collection.get(1) : collection.get(0);
+        return v;
     }
 }

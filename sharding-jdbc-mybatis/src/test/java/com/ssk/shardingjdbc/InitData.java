@@ -29,10 +29,10 @@ public class InitData {
     private OrdersService ordersService;
     @Autowired
     private OrdersDetailService ordersDetailService;
-    private SnowFlake snowFlake = new SnowFlake(0, 0);
+    private SnowFlake snowFlake = new SnowFlake(1, 1);
     @Test
     public void batchInitData() {
-        for (int i = 0; i < 200000; i++) {
+        for (int i = 0; i < 200; i++) {
             Orders orders = new Orders();
             String orderId = String.valueOf(snowFlake.nextId());
             orders.setId(orderId);
